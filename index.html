@@ -51,10 +51,12 @@ input,textarea{
 
 .assistant{
   background:#f1f1f1;
-  padding:15px;
+  padding:20px;
   border-radius:10px;
-  margin-top:10px;
+  margin-top:15px;
   white-space:pre-line;
+  line-height:1.8;
+  font-size:16px;
 }
 
 /* Carta */
@@ -117,7 +119,6 @@ input,textarea{
 <!-- NOTA -->
 <div id="nota" class="hidden">
   <div id="contenido" class="assistant"></div>
-  <button onclick="reproducirAudio()" style="opacity:1">🎤 Escuchar mensaje</button>
 </div>
 
 </div>
@@ -128,11 +129,7 @@ input,textarea{
 </audio>
 
 <audio autoplay loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3">
-</audio>
-
-<audio id="audioPersonal">
-  <source src="">
+  <source src="https://music.youtube.com/search?q=instrumental+de+amor">
 </audio>
 
 <script>
@@ -179,17 +176,16 @@ function verNota(){
   nota.classList.remove('hidden');
 
   escribir(contenido,
-`💌 Esta nota es para ${params.get('p')}
+`💌 Esta nota es para:
 
-"${params.get('m')}" 💖`);
+${params.get('p')}
+
+
+💖 Mensaje:
+
+"${params.get('m')}"`);
 
   click.play();
-}
-
-// AUDIO
-function reproducirAudio(){
-  if(audioPersonal.src) audioPersonal.play();
-  else alert('No hay audio');
 }
 
 // CORAZONES
@@ -222,6 +218,7 @@ Tengo una nota para ti 💖`);
 
 </body>
 </html>
+
 
 
 
