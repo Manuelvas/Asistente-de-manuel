@@ -51,10 +51,13 @@
       font-weight: bold;
     }
 
-    img {
-      width: 100%;
-      border-radius: 15px;
+    .link-box {
       margin-top: 10px;
+      font-size: 12px;
+      word-break: break-all;
+      background: #eee;
+      padding: 10px;
+      border-radius: 10px;
     }
 
     .hidden { display: none; }
@@ -65,27 +68,22 @@
 <div class="container">
   <h1>💖 Asistente de Manuel</h1>
 
-  <!-- LOGIN -->
   <div id="login">
     <input type="password" id="clave" placeholder="Contraseña">
     <button onclick="entrar()">Entrar</button>
   </div>
 
-  <!-- APP -->
   <div id="app" class="hidden">
 
     <input type="text" id="nombre" placeholder="Tu nombre">
     <input type="text" id="pareja" placeholder="Nombre de tu pareja">
     <textarea id="mensaje" placeholder="Mensaje..."></textarea>
 
-    <input type="date" id="fecha">
-    <input type="file" id="foto" accept="image/*">
-
-    <button onclick="guardarNota()">Guardar Nota Programada</button>
-    <button onclick="mostrarNotas()">Ver Notas Disponibles</button>
+    <button onclick="generarLink()">💌 Crear Nota y Link</button>
 
     <div class="assistant" id="pantalla"></div>
-    <img id="imagen" class="hidden">
+
+    <div id="linkGenerado" class="link-box hidden"></div>
 
   </div>
 </div>
@@ -95,74 +93,44 @@ const PASSWORD = "1234";
 
 function entrar(){
   const clave = document.getElementById('clave').value;
-  const loginDiv = document.getElementById('login');
-  const appDiv = document.getElementById('app');
-
   if(clave === PASSWORD){
-    loginDiv.classList.add('hidden');
-    appDiv.classList.remove('hidden');
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
   } else {
     alert('Contraseña incorrecta');
   }
 }
 
-function guardarNota(){
-  const file = document.getElementById('foto').files[0];
-
+function generarLink(){
   const nombre = document.getElementById('nombre').value;
   const pareja = document.getElementById('pareja').value;
   const mensaje = document.getElementById('mensaje').value;
-  const fecha = document.getElementById('fecha').value;
 
-  function guardar(imagenBase64 = null){
-    const nota = { nombre, pareja, mensaje, fecha, imagen: imagenBase64 };
-
-    let notas = JSON.parse(localStorage.getItem('notas')) || [];
-    notas.push(nota);
-    localStorage.setItem('notas', JSON.stringify(notas));
-
-    alert('Nota programada 💌');
-
-    document.getElementById('mensaje').value = '';
-    document.getElementById('foto').value = '';
-  }
-
-  if(file){
-    const reader = new FileReader();
-    reader.onload = function(){
-      guardar(reader.result);
-    };
-    reader.readAsDataURL(file);
-  } else {
-    guardar();
-  }
-}
-
-function mostrarNotas(){
-  const hoy = new Date().toISOString().split('T')[0];
-  let notas = JSON.parse(localStorage.getItem('notas')) || [];
-
-  const disponibles = notas.filter(n => n.fecha <= hoy);
-
-  const pantalla = document.getElementById('pantalla');
-  const imagen = document.getElementById('imagen');
-
-  if(disponibles.length === 0){
-    pantalla.innerText = 'No hay notas disponibles aún 💭';
-    imagen.classList.add('hidden');
+  if(!nombre || !pareja || !mensaje){
+    alert('Completa todos los campos');
     return;
   }
 
-  const nota = disponibles[disponibles.length - 1];
+  const url = `${window.location.origin}${window.location.pathname}?n=${encodeURIComponent(nombre)}&p=${encodeURIComponent(pareja)}&m=${encodeURIComponent(mensaje)}`;
 
-  pantalla.innerText = `💌 Soy el asistente de ${nota.nombre}\n\nHola ${nota.pareja}, tienes una nota:\n\n"${nota.mensaje}"`;
+  document.getElementById('pantalla').innerText = 'Nota guardada y link generado 💌';
 
-  if(nota.imagen){
-    imagen.src = nota.imagen;
-    imagen.classList.remove('hidden');
-  } else {
-    imagen.classList.add('hidden');
-  }
+  const linkBox = document.getElementById('linkGenerado');
+  linkBox.classList.remove('hidden');
+  linkBox.innerText = url;
+
+  navigator.clipboard.writeText(url);
+}
+
+// Cargar nota desde link
+const params = new URLSearchParams(window.location.search);
+if(params.get('m')){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+
+  const texto = `💌 Hola, soy el asistente de Manuel\n\n${params.get('p')}, tienes una nota:\n\n"${params.get('m')}" 💖`;
+
+  document.getElementById('pantalla').innerText = texto;
 }
 </script>
 
