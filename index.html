@@ -94,10 +94,17 @@
 const PASSWORD = "1234";
 
 function entrar(){
-  if(document.getElementById('clave').value === PASSWORD){
-    login.classList.add('hidden');
-    app.classList.remove('hidden');
-  } else alert('Incorrecta');
+  const clave = document.getElementById('clave').value;
+  const loginDiv = document.getElementById('login');
+  const appDiv = document.getElementById('app');
+
+  if(clave === PASSWORD){
+    loginDiv.classList.add('hidden');
+    appDiv.classList.remove('hidden');
+  } else {
+    alert('Contraseña incorrecta');
+  }
+} else alert('Incorrecta');
 }
 
 function guardarNota(){
@@ -171,6 +178,5 @@ function mostrarNotas(){
 
 </body>
 </html>
->
 
 
