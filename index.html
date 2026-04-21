@@ -1,207 +1,228 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Asistente de Manuel</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<title>Asistente de Manuel</title>
 
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      width: 400px;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
+<style>
+body{
+  font-family: Arial;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:0;
+  overflow:hidden;
+}
 
-    .assistant {
-      background: #f1f1f1;
-      border-radius: 15px;
-      padding: 20px;
-      margin-top: 20px;
-      min-height: 120px;
-      white-space: pre-line;
-    }
+.container{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  width:350px;
+  text-align:center;
+  position:relative;
+  z-index:2;
+}
 
-    button {
-      margin-top: 15px;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #ff6b81;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
+.hidden{display:none}
 
-    .show-btn { opacity: 1; }
-    .hidden { display: none; }
+button{
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  background:#ff6b81;
+  color:white;
+  cursor:pointer;
+  opacity:0;
+  transition:1s;
+}
 
-    .fade { animation: fadeIn 1s ease forwards; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.show{opacity:1}
 
-    /* Carta animada */
-    .carta {
-      width: 100px;
-      height: 70px;
-      background: #fff;
-      border: 2px solid #ff6b81;
-      position: relative;
-      margin: 20px auto;
-      cursor: pointer;
-      transform-style: preserve-3d;
-      transition: transform 1s;
-    }
+input,textarea{
+  width:100%;
+  margin-top:8px;
+  padding:8px;
+  border-radius:10px;
+}
 
-    .carta.open {
-      transform: rotateX(180deg);
-    }
+.assistant{
+  background:#f1f1f1;
+  padding:15px;
+  border-radius:10px;
+  margin-top:10px;
+  white-space:pre-line;
+}
 
-    /* Corazones */
-    .heart {
-      position: absolute;
-      color: #ff6b81;
-      animation: floatUp 5s linear infinite;
-      z-index: 1;
-    }
+/* Carta */
+.carta{
+  width:100px;
+  height:70px;
+  background:white;
+  border:2px solid #ff6b81;
+  margin:20px auto;
+  cursor:pointer;
+}
 
-    @keyframes floatUp {
-      from { transform: translateY(100vh); opacity: 1; }
-      to { transform: translateY(-10vh); opacity: 0; }
-    }
-  </style>
+/* Corazones */
+.heart{
+  position:absolute;
+  color:#ff6b81;
+  animation:subir 5s linear infinite;
+}
+
+@keyframes subir{
+  from{transform:translateY(100vh)}
+  to{transform:translateY(-10vh);opacity:0}
+}
+</style>
+
 </head>
 <body>
 
 <div class="container">
 
-  <div id="presentacion" class="hidden">
-    <div class="assistant fade" id="textoPresentacion"></div>
-    <button id="btnVer" onclick="mostrarCarta()">Ver nota 💌</button>
-  </div>
+<!-- LOGIN -->
+<div id="login">
+  <h3>🔐 Panel Admin</h3>
+  <input type="password" id="clave" placeholder="Contraseña">
+  <button onclick="entrar()" style="opacity:1">Entrar</button>
+</div>
 
-  <!-- Carta animada -->
-  <div id="cartaBox" class="hidden">
-    <div class="carta" onclick="verNota()"></div>
-    <p>Toca la carta 💌</p>
-  </div>
+<!-- ADMIN -->
+<div id="admin" class="hidden">
+  <h3>💌 Crear Nota</h3>
+  <input id="nombre" placeholder="Tu nombre">
+  <input id="pareja" placeholder="Nombre pareja">
+  <textarea id="mensaje" placeholder="Mensaje"></textarea>
+  <button onclick="crearLink()" style="opacity:1">Generar Link</button>
+  <div id="link" class="assistant"></div>
+</div>
 
-  <div id="notaFinal" class="hidden">
-    <div class="assistant fade" id="textoNota"></div>
+<!-- PRESENTACION -->
+<div id="presentacion" class="hidden">
+  <div id="saludo" class="assistant"></div>
+  <button id="btnVer" onclick="mostrarCarta()">Ver nota 💌</button>
+</div>
 
-    <!-- BOTÓN OPCIONAL VOZ -->
-    <button id="btnAudio" onclick="reproducirAudio()" style="opacity:1;">🎤 Escuchar mensaje</button>
-  </div>
+<!-- CARTA -->
+<div id="cartaBox" class="hidden">
+  <div class="carta" onclick="verNota()"></div>
+  <p>Toca la carta 💌</p>
+</div>
+
+<!-- NOTA -->
+<div id="nota" class="hidden">
+  <div id="contenido" class="assistant"></div>
+  <button onclick="reproducirAudio()" style="opacity:1">🎤 Escuchar mensaje</button>
+</div>
 
 </div>
 
 <!-- SONIDOS -->
-<audio id="sonidoClick">
-  <source src="https://www.soundjay.com/buttons/sounds/button-09.mp3" type="audio/mpeg">
+<audio id="click">
+  <source src="https://www.soundjay.com/buttons/sounds/button-09.mp3">
 </audio>
 
-<audio id="musica" loop autoplay>
-  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+<audio autoplay loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3">
 </audio>
 
-<!-- AUDIO PERSONAL (CAMBIAS ESTE LINK CUANDO QUIERAS) -->
 <audio id="audioPersonal">
-  <source src="" type="audio/mpeg">
+  <source src="">
 </audio>
 
 <script>
-let nombrePareja = '';
-let mensajeNota = '';
 
-// Máquina escribir
-function escribirTexto(el, texto, vel=40){
+const PASSWORD="1234";
+
+// LOGIN
+function entrar(){
+  if(clave.value===PASSWORD){
+    login.classList.add('hidden');
+    admin.classList.remove('hidden');
+  }else alert('Incorrecta');
+}
+
+// CREAR LINK
+function crearLink(){
+  const url=`${location.origin}${location.pathname}?modo=novia&n=${encodeURIComponent(nombre.value)}&p=${encodeURIComponent(pareja.value)}&m=${encodeURIComponent(mensaje.value)}`;
+  link.innerText=url;
+}
+
+// EFECTO ESCRIBIR
+function escribir(el,texto){
   let i=0;
-  el.innerText='';
-  function escribir(){
+  el.innerText="";
+  function t(){
     if(i<texto.length){
-      el.innerText += texto.charAt(i);
+      el.innerText+=texto[i];
       i++;
-      setTimeout(escribir, vel);
+      setTimeout(t,30);
     }
   }
-  escribir();
+  t();
 }
 
+// CARTA
 function mostrarCarta(){
-  document.getElementById('presentacion').classList.add('hidden');
-  document.getElementById('cartaBox').classList.remove('hidden');
+  presentacion.classList.add('hidden');
+  cartaBox.classList.remove('hidden');
 }
 
+// VER NOTA
 function verNota(){
-  document.getElementById('cartaBox').classList.add('hidden');
-  document.getElementById('notaFinal').classList.remove('hidden');
+  cartaBox.classList.add('hidden');
+  nota.classList.remove('hidden');
 
-  const texto = `💌 Esta nota es para ${nombrePareja}\n\n"${mensajeNota}" 💖`;
-  escribirTexto(document.getElementById('textoNota'), texto);
+  escribir(contenido,
+`💌 Esta nota es para ${params.get('p')}
 
-  document.getElementById('sonidoClick').play();
+"${params.get('m')}" 💖`);
+
+  click.play();
 }
 
+// AUDIO
 function reproducirAudio(){
-  const audio = document.getElementById('audioPersonal');
-  if(audio.src){
-    audio.play();
-  } else {
-    alert('No hay audio configurado');
-  }
+  if(audioPersonal.src) audioPersonal.play();
+  else alert('No hay audio');
 }
 
-// Corazones
-function crearCorazon(){
-  const heart = document.createElement('div');
-  heart.className='heart';
-  heart.innerText='💗';
-  heart.style.left=Math.random()*100+'vw';
-  heart.style.fontSize=(Math.random()*20+10)+'px';
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),5000);
+// CORAZONES
+setInterval(()=>{
+  const h=document.createElement('div');
+  h.className='heart';
+  h.innerText='💗';
+  h.style.left=Math.random()*100+'vw';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),5000);
+},500);
+
+// DETECTAR MODO
+const params=new URLSearchParams(location.search);
+
+if(params.get('modo')==='novia'){
+  login.classList.add('hidden');
+
+  presentacion.classList.remove('hidden');
+
+  escribir(saludo,
+`💌 Hola ${params.get('p')}, soy el asistente de Manuel
+
+Tengo una nota para ti 💖`);
+
+  setTimeout(()=>btnVer.classList.add('show'),3000);
 }
-setInterval(crearCorazon,500);
 
-// Cargar link
-window.addEventListener('DOMContentLoaded',()=>{
-  const params = new URLSearchParams(window.location.search);
-
-  if(params.get('m')){
-    nombrePareja = params.get('p');
-    mensajeNota = params.get('m');
-
-    document.getElementById('presentacion').classList.remove('hidden');
-
-    const texto = `💌 Hola ${nombrePareja}, soy el asistente de Manuel\n\nTengo una nota para ti 💖`;
-    escribirTexto(document.getElementById('textoPresentacion'), texto);
-
-    setTimeout(()=>{
-      document.getElementById('btnVer').classList.add('show-btn');
-    },3000);
-  }
-});
 </script>
 
 </body>
 </html>
+
 
 
 
