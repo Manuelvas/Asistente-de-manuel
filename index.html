@@ -104,21 +104,18 @@ function entrar(){
   } else {
     alert('Contraseña incorrecta');
   }
-} else alert('Incorrecta');
 }
 
 function guardarNota(){
   const file = document.getElementById('foto').files[0];
 
-  // Función para guardar la nota
+  const nombre = document.getElementById('nombre').value;
+  const pareja = document.getElementById('pareja').value;
+  const mensaje = document.getElementById('mensaje').value;
+  const fecha = document.getElementById('fecha').value;
+
   function guardar(imagenBase64 = null){
-    const nota = {
-      nombre: nombre.value,
-      pareja: pareja.value,
-      mensaje: mensaje.value,
-      fecha: fecha.value,
-      imagen: imagenBase64
-    };
+    const nota = { nombre, pareja, mensaje, fecha, imagen: imagenBase64 };
 
     let notas = JSON.parse(localStorage.getItem('notas')) || [];
     notas.push(nota);
@@ -126,12 +123,10 @@ function guardarNota(){
 
     alert('Nota programada 💌');
 
-    // limpiar campos
-    mensaje.value = '';
-    foto.value = '';
+    document.getElementById('mensaje').value = '';
+    document.getElementById('foto').value = '';
   }
 
-  // Si hay imagen
   if(file){
     const reader = new FileReader();
     reader.onload = function(){
@@ -139,19 +134,8 @@ function guardarNota(){
     };
     reader.readAsDataURL(file);
   } else {
-    // Si NO hay imagen (este era el problema)
     guardar();
   }
-};
-
-    let notas = JSON.parse(localStorage.getItem('notas')) || [];
-    notas.push(nota);
-    localStorage.setItem('notas', JSON.stringify(notas));
-
-    alert('Nota programada 💌');
-  };
-
-  if(file) reader.readAsDataURL(file);
 }
 
 function mostrarNotas(){
@@ -160,8 +144,12 @@ function mostrarNotas(){
 
   const disponibles = notas.filter(n => n.fecha <= hoy);
 
+  const pantalla = document.getElementById('pantalla');
+  const imagen = document.getElementById('imagen');
+
   if(disponibles.length === 0){
     pantalla.innerText = 'No hay notas disponibles aún 💭';
+    imagen.classList.add('hidden');
     return;
   }
 
@@ -172,6 +160,8 @@ function mostrarNotas(){
   if(nota.imagen){
     imagen.src = nota.imagen;
     imagen.classList.remove('hidden');
+  } else {
+    imagen.classList.add('hidden');
   }
 }
 </script>
