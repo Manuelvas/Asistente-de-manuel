@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Asistente DE MANUEL</title>
+  <title>Asistente Romántico PRO</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -63,7 +63,7 @@
 <body>
 
 <div class="container">
-  <h1>💖 Asistente de Manuel</h1>
+  <h1>💖 Asistente</h1>
 
   <!-- LOGIN -->
   <div id="login">
@@ -101,17 +101,41 @@ function entrar(){
 }
 
 function guardarNota(){
-  const reader = new FileReader();
   const file = document.getElementById('foto').files[0];
 
-  reader.onload = function(){
+  // Función para guardar la nota
+  function guardar(imagenBase64 = null){
     const nota = {
       nombre: nombre.value,
       pareja: pareja.value,
       mensaje: mensaje.value,
       fecha: fecha.value,
-      imagen: reader.result
+      imagen: imagenBase64
     };
+
+    let notas = JSON.parse(localStorage.getItem('notas')) || [];
+    notas.push(nota);
+    localStorage.setItem('notas', JSON.stringify(notas));
+
+    alert('Nota programada 💌');
+
+    // limpiar campos
+    mensaje.value = '';
+    foto.value = '';
+  }
+
+  // Si hay imagen
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(){
+      guardar(reader.result);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    // Si NO hay imagen (este era el problema)
+    guardar();
+  }
+};
 
     let notas = JSON.parse(localStorage.getItem('notas')) || [];
     notas.push(nota);
@@ -147,5 +171,6 @@ function mostrarNotas(){
 
 </body>
 </html>
+>
 
 
