@@ -122,13 +122,33 @@ function generarLink(){
   navigator.clipboard.writeText(url);
 }
 
-// Cargar nota desde link
-const params = new URLSearchParams(window.location.search);
-if(params.get('m')){
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
+// Cargar nota desde link (SIN mostrar login)
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
 
-  const texto = `💌 Hola, soy el asistente de Manuel\n\n${params.get('p')}, tienes una nota:\n\n"${params.get('m')}" 💖`;
+  if(params.get('m')){
+    // ocultar login completamente
+    document.getElementById('login').style.display = 'none';
+
+    // mostrar app directamente
+    document.getElementById('app').classList.remove('hidden');
+
+    const texto = `💌 Hola, soy el asistente de Manuel
+
+${params.get('p')}, tienes una nota:
+
+"${params.get('m')}" 💖`;
+
+    document.getElementById('pantalla').innerText = texto;
+
+    // opcional: ocultar inputs para que solo vea el mensaje
+    document.getElementById('nombre').style.display = 'none';
+    document.getElementById('pareja').style.display = 'none';
+    document.getElementById('mensaje').style.display = 'none';
+    document.querySelector('button').style.display = 'none';
+    document.getElementById('linkGenerado').style.display = 'none';
+  }
+});, tienes una nota:\n\n"${params.get('m')}" 💖`;
 
   document.getElementById('pantalla').innerText = texto;
 }
@@ -136,5 +156,6 @@ if(params.get('m')){
 
 </body>
 </html>
+
 
 
