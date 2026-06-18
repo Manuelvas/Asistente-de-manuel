@@ -261,6 +261,10 @@ Gracias por tu compañía, tu apoyo y todos los momentos que hemos vivido juntos
 ❤️ Manuel ❤️
 </div>
 
+<p style="text-align:center;margin-top:20px;color:#ff4d6d;font-size:20px;">
+Gracias por ser parte de mi historia ❤️
+</p>
+
 </div>
 
 <h2 style="margin-top:30px;color:#ff4d6d;">
@@ -273,6 +277,14 @@ Gracias por tu compañía, tu apoyo y todos los momentos que hemos vivido juntos
 <img src="img/foto2.jpeg" alt="">
 <img src="img/foto3.jpeg" alt="">
 <img src="img/foto4.jpeg" alt="">
+
+</div>
+
+  <div style="margin-top:25px;">
+
+<button onclick="toggleMusica()">
+🎵 Pausar / Reanudar Música
+</button>
 
 </div>
 
@@ -295,6 +307,12 @@ function abrirNota(){
 const sobre=document.querySelector(".sobre");
 
 sobre.classList.add("abierto");
+
+// Iniciar música
+
+const musica=document.getElementById("musica");
+
+musica.play().catch(()=>{});
 
 setTimeout(()=>{
 
@@ -338,7 +356,28 @@ h.remove();
 
 },700);
 
+// CONTROL DE MUSICA
+
+function toggleMusica(){
+
+const musica=document.getElementById("musica");
+
+if(musica.paused){
+
+    musica.play();
+
+}else{
+
+    musica.pause();
+
+}
+
+}
+
 </script>
 
+  <audio id="musica" loop>
+    <source src="music/musica1.mp3" type="audio/mpeg">
+</audio>
 </body>
 </html>
