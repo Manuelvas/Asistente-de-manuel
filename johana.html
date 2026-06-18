@@ -172,6 +172,22 @@ box-shadow:0 5px 15px rgba(0,0,0,.2);
 transform:scale(1.05);
 }
 
+  .carrusel{
+margin-top:25px;
+display:flex;
+justify-content:center;
+}
+
+.carrusel img{
+width:100%;
+max-width:500px;
+height:500px;
+object-fit:cover;
+border-radius:25px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+transition:opacity .8s;
+}
+
 .heart{
 position:fixed;
 font-size:25px;
@@ -271,12 +287,9 @@ Gracias por ser parte de mi historia ❤️
 📸 Nuestros Recuerdos
 </h2>
 
-<div class="galeria">
+<div class="carrusel">
 
-<img src="img/foto1.jpeg" alt="">
-<img src="img/foto2.jpeg" alt="">
-<img src="img/foto3.jpeg" alt="">
-<img src="img/foto4.jpeg" alt="">
+<img id="fotoCarrusel" src="img/foto1.jpeg" alt="">
 
 </div>
 
@@ -356,6 +369,44 @@ h.remove();
 
 },700);
 
+
+// CARRUSEL
+
+const fotos = [
+"img/foto1.jpeg",
+"img/foto2.jpeg",
+"img/foto3.jpeg",
+"img/foto4.jpeg"
+];
+
+let indice = 0;
+
+setInterval(()=>{
+
+const img = document.getElementById("fotoCarrusel");
+
+if(img){
+
+indice++;
+
+if(indice >= fotos.length){
+indice = 0;
+}
+
+img.style.opacity="0";
+
+setTimeout(()=>{
+
+img.src=fotos[indice];
+
+img.style.opacity="1";
+
+},400);
+
+}
+
+},3000);
+  
 // CONTROL DE MUSICA
 
 function toggleMusica(){
