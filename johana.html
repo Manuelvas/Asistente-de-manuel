@@ -337,6 +337,45 @@ document.getElementById("nota").classList.remove("hidden");
 
 }
 
+// LEER DATOS DEL LINK
+
+const hash = location.hash.substring(1);
+
+if(hash){
+
+try{
+
+const datos = JSON.parse(
+decodeURIComponent(
+escape(
+atob(hash)
+)
+)
+);
+
+document.querySelector("h1").innerHTML =
+`❤️ Hola ${datos.p} ❤️`;
+
+document.querySelector(".mensaje").innerHTML = `
+<h2>Para ti ❤️</h2>
+
+<p>
+${datos.m.replace(/\n/g,"<br>")}
+</p>
+
+<div class="firma">
+❤️ ${datos.n} ❤️
+</div>
+`;
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+  
 // CONTADOR
 
 const inicio=new Date("2023-02-09");
