@@ -152,26 +152,6 @@ font-weight:bold;
 color:#ff4d6d;
 }
 
-.galeria{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-margin-top:25px;
-}
-
-.galeria img{
-width:100%;
-height:280px;
-object-fit:cover;
-border-radius:20px;
-transition:.5s;
-box-shadow:0 5px 15px rgba(0,0,0,.2);
-}
-
-.galeria img:hover{
-transform:scale(1.05);
-}
-
   .carrusel{
 margin-top:25px;
 display:flex;
@@ -192,6 +172,14 @@ transition:opacity .8s;
 position:fixed;
 font-size:25px;
 animation:subir 5s linear forwards;
+pointer-events:none;
+}
+
+  .star{
+position:fixed;
+color:white;
+font-size:18px;
+animation:subir 8s linear forwards;
 pointer-events:none;
 }
 
@@ -216,7 +204,7 @@ opacity:0;
 <h1>❤️ Hola Johana ❤️</h1>
 
 <p>
-Tengo algo especial preparado por Manuel.
+Tengo algo especial preparado para ti ❤️
 </p>
 
 <div id="diasJuntos" class="contador"></div>
@@ -245,42 +233,6 @@ Abrir sorpresa 💌
 
 <div class="mensaje">
 
-<h2>Para ti ❤️</h2>
-
-<p>Mi amor:</p>
-
-<br>
-
-<p>
-Gracias por cada momento compartido.
-</p>
-
-<br>
-
-<p>
-Desde el 09/02/2023 has sido una parte muy importante de mi vida.
-</p>
-
-<br>
-
-<p>
-Quiero que esta pequeña página sea un recuerdo especial para ti.
-</p>
-
-<br>
-
-<p>
-Gracias por tu compañía, tu apoyo y todos los momentos que hemos vivido juntos.
-</p>
-
-<div class="firma">
-❤️ Manuel ❤️
-</div>
-
-<p style="text-align:center;margin-top:20px;color:#ff4d6d;font-size:20px;">
-Gracias por ser parte de mi historia ❤️
-</p>
-
 </div>
 
 <h2 style="margin-top:30px;color:#ff4d6d;">
@@ -298,6 +250,27 @@ Gracias por ser parte de mi historia ❤️
 <button onclick="toggleMusica()">
 🎵 Pausar / Reanudar Música
 </button>
+
+    <h2 style="margin-top:40px;color:#ff4d6d;">
+🔒 Mensaje Secreto
+</h2>
+
+<button onclick="mostrarSecreto()">
+❤️ Abrir Mensaje
+</button>
+
+<div id="mensajeSecreto"
+style="
+display:none;
+margin-top:20px;
+padding:20px;
+background:#fff0f3;
+border-radius:15px;
+font-size:20px;
+"
+>
+Eres una de las mejores cosas que me han pasado ❤️
+</div>
 
 </div>
 
@@ -359,14 +332,34 @@ document.querySelector("h1").innerHTML =
 document.querySelector(".mensaje").innerHTML = `
 <h2>Para ti ❤️</h2>
 
-<p>
-${datos.m.replace(/\n/g,"<br>")}
-</p>
+<div id="textoCarta"></div>
 
 <div class="firma">
 ❤️ ${datos.n} ❤️
 </div>
 `;
+
+let texto = datos.m;
+let i = 0;
+
+function escribir(){
+
+if(i < texto.length){
+
+document.getElementById("textoCarta").innerHTML +=
+texto.charAt(i) === "\n"
+? "<br>"
+: texto.charAt(i);
+
+i++;
+
+setTimeout(escribir,40);
+
+}
+
+}
+
+escribir();
 
 }catch(error){
 
@@ -407,6 +400,24 @@ h.remove();
 },5000);
 
 },700);
+
+  setInterval(()=>{
+
+const s=document.createElement("div");
+
+s.className="star";
+
+s.innerHTML="✨";
+
+s.style.left=Math.random()*100+"vw";
+
+document.body.appendChild(s);
+
+setTimeout(()=>{
+s.remove();
+},8000);
+
+},1500);
 
 
 // CARRUSEL
@@ -461,6 +472,13 @@ if(musica.paused){
     musica.pause();
 
 }
+
+}
+
+function mostrarSecreto(){
+
+document.getElementById("mensajeSecreto")
+.style.display="block";
 
 }
 
