@@ -8,10 +8,15 @@
 
 <style>
 
-body{
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
 font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+}
+
+body{
+background:linear-gradient(135deg,#ffb3b3,#ffd6d6);
 min-height:100vh;
 display:flex;
 justify-content:center;
@@ -22,15 +27,19 @@ overflow-x:hidden;
 
 .container{
 max-width:800px;
+width:100%;
 background:white;
 padding:30px;
 border-radius:25px;
 text-align:center;
-box-shadow:0 0 30px rgba(0,0,0,.2);
+box-shadow:0 0 25px rgba(0,0,0,.15);
+position:relative;
+z-index:2;
 }
 
 h1{
 color:#ff4d6d;
+margin-bottom:15px;
 }
 
 button{
@@ -39,51 +48,75 @@ border:none;
 border-radius:12px;
 background:#ff4d6d;
 color:white;
-cursor:pointer;
 font-size:16px;
-}
-
-.carta{
-font-size:100px;
 cursor:pointer;
-animation:latir 1s infinite;
+margin-top:20px;
+transition:.3s;
 }
 
-@keyframes latir{
-50%{
-transform:scale(1.1);
-}
+button:hover{
+transform:scale(1.05);
 }
 
 .hidden{
 display:none;
 }
 
-.mensaje{
-background:#f8f8f8;
-padding:20px;
-border-radius:15px;
-line-height:1.8;
-white-space:pre-line;
+.contador{
+margin-top:15px;
+font-size:18px;
+font-weight:bold;
+color:#ff4d6d;
+}
+
+.carta{
+font-size:100px;
+cursor:pointer;
+animation:latir 1s infinite;
 margin-top:20px;
+}
+
+@keyframes latir{
+50%{
+transform:scale(1.12);
+}
+}
+
+.mensaje{
+background:#fff;
+padding:25px;
+border-radius:15px;
+line-height:1.9;
+margin-top:20px;
+text-align:left;
+font-size:18px;
+box-shadow:0 0 15px rgba(0,0,0,.08);
+}
+
+.mensaje h2{
+text-align:center;
+margin-bottom:20px;
+color:#ff4d6d;
 }
 
 .galeria{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
 gap:10px;
-margin-top:20px;
+margin-top:25px;
 }
 
 .galeria img{
 width:100%;
 border-radius:15px;
+object-fit:cover;
 }
 
 .heart{
 position:fixed;
 font-size:25px;
 animation:subir 5s linear forwards;
+pointer-events:none;
 }
 
 @keyframes subir{
@@ -95,6 +128,14 @@ to{
 transform:translateY(-100px);
 opacity:0;
 }
+}
+
+.firma{
+text-align:center;
+font-size:22px;
+margin-top:25px;
+color:#ff4d6d;
+font-weight:bold;
 }
 
 </style>
@@ -110,9 +151,13 @@ opacity:0;
 Tengo algo especial preparado por Manuel.
 </p>
 
+<div id="diasJuntos" class="contador"></div>
+
 <button onclick="mostrarCarta()">
 Abrir sorpresa 💌
 </button>
+
+<!-- SOBRE -->
 
 <div id="carta" class="hidden">
 
@@ -120,9 +165,11 @@ Abrir sorpresa 💌
 💌
 </div>
 
-<p>Toca la carta</p>
+<p>Toca la carta para abrirla</p>
 
 </div>
+
+<!-- NOTA -->
 
 <div id="nota" class="hidden">
 
@@ -131,29 +178,47 @@ Abrir sorpresa 💌
 <h2>Para ti ❤️</h2>
 
 <p>
-
 Mi amor:
-
-Gracias por cada momento compartido.
-
-Desde el 09/02/2023 has sido una parte muy importante de mi vida.
-
-Quiero que esta pequeña página sea un recuerdo especial para ti.
-
-Con mucho cariño,
-
-❤️ Manuel ❤️
-
 </p>
+
+<br>
+
+<p>
+Gracias por cada momento compartido.
+</p>
+
+<br>
+
+<p>
+Desde el 09/02/2023 has sido una parte muy importante de mi vida.
+</p>
+
+<br>
+
+<p>
+Quiero que esta pequeña página sea un recuerdo especial para ti.
+</p>
+
+<br>
+
+<p>
+Gracias por tu compañía, tu apoyo y todos los momentos que hemos vivido juntos.
+</p>
+
+<div class="firma">
+❤️ Manuel ❤️
+</div>
 
 </div>
 
+<!-- FOTOS -->
+
 <div class="galeria">
 
-<img src="img/foto1.jpg">
-<img src="img/foto2.jpg">
-<img src="img/foto3.jpg">
-<img src="img/foto4.jpg">
+<img src="img/foto1.jpg" alt="">
+<img src="img/foto2.jpg" alt="">
+<img src="img/foto3.jpg" alt="">
+<img src="img/foto4.jpg" alt="">
 
 </div>
 
@@ -163,23 +228,50 @@ Con mucho cariño,
 
 <script>
 
+// MOSTRAR SOBRE
+
 function mostrarCarta(){
+
 document.getElementById("carta").classList.remove("hidden");
+
+document.getElementById("nota").classList.add("hidden");
+
 }
 
+// ABRIR CARTA
+
 function abrirNota(){
+
+document.getElementById("carta").classList.add("hidden");
+
 document.getElementById("nota").classList.remove("hidden");
+
 }
+
+// CONTADOR
+
+const inicio = new Date("2023-02-09");
+
+const hoy = new Date();
+
+const dias = Math.floor(
+(hoy - inicio) / (1000 * 60 * 60 * 24)
+);
+
+document.getElementById("diasJuntos").innerHTML =
+`❤️ Han pasado ${dias} días desde el 09/02/2023 ❤️`;
+
+// CORAZONES
 
 setInterval(()=>{
 
-const h=document.createElement("div");
+const h = document.createElement("div");
 
-h.className="heart";
+h.className = "heart";
 
-h.innerHTML="💗";
+h.innerHTML = "💗";
 
-h.style.left=Math.random()*100+"vw";
+h.style.left = Math.random()*100 + "vw";
 
 document.body.appendChild(h);
 
@@ -187,7 +279,7 @@ setTimeout(()=>{
 h.remove();
 },5000);
 
-},600);
+},700);
 
 </script>
 
