@@ -63,8 +63,11 @@ display:none;
 }
 
 .contador{
-margin-top:15px;
-font-size:18px;
+margin-top:20px;
+padding:15px;
+background:#fff0f3;
+border-radius:15px;
+font-size:20px;
 font-weight:bold;
 color:#ff4d6d;
 }
@@ -108,8 +111,16 @@ margin-top:25px;
 
 .galeria img{
 width:100%;
-border-radius:15px;
+height:250px;
 object-fit:cover;
+border-radius:20px;
+transition:0.5s;
+cursor:pointer;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+.galeria img:hover{
+transform:scale(1.05);
 }
 
 .heart{
@@ -214,7 +225,10 @@ Gracias por tu compañía, tu apoyo y todos los momentos que hemos vivido juntos
 
 
 <!-- FOTOS -->
-
+<h2 style="margin-top:30px;color:#ff4d6d;">
+📸 Nuestros Recuerdos
+</h2>
+    
 <div class="galeria">
 
     <img src="img/foto1.jpeg" alt="Foto 1">
